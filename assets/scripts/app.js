@@ -54,6 +54,13 @@ class ProductItem {
   constructor(product){
    this.product = product;
   }
+
+  // add to cart method
+  addToCart (){
+    console.log('adding to cart is successfully passed')
+    console.log(this.product);
+  }
+
 // add render method to render one single product logic
 
 renderProduct (){
@@ -71,7 +78,10 @@ renderProduct (){
   </div>
   </div>
   
-  `
+  `;
+  // accessing the button
+  const addCartButton = prodElement.querySelector('button');
+  addCartButton.addEventListener('click', this.addToCart.bind(this));
   return prodElement
 } 
 }
