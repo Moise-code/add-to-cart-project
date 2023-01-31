@@ -30,7 +30,7 @@ class ProductList {
   
     
   ];
-  constructor () {}
+  constructor () {} 
 
   // we are going to add the render object then here.
   render(){
