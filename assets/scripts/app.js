@@ -34,18 +34,17 @@ class ProductList {
 
   // we are going to add the render object then here.
   render(){
-    const renderBook = document.querySelector('#app');
     const prodList = document.createElement('ul');
     prodList.className = 'product-list';
     for(const prod of this.products){
       const productItem = new ProductItem(prod);
       const prodElement = productItem.renderProduct();
-     
-     prodList.append(prodElement);
-     
+      
+      prodList.append(prodElement);
+      
     }
-    renderBook.append(prodList)
-   }
+    return prodList;
+  }
 }
 
 // now lets create a class to store one item
@@ -54,39 +53,68 @@ class ProductItem {
   constructor(product){
    this.product = product;
   }
-
+  
   // add to cart method
   addToCart (){
     console.log('adding to cart is successfully passed')
     console.log(this.product);
   }
-
-// add render method to render one single product logic
-
-renderProduct (){
-  const prodElement = document.createElement('li')
-  prodElement.className = 'product-item';
-  prodElement.innerHTML = `
   
-  <div>
-  <img src = "${this.product.imageUrl}" alt = "${this.product.title}>
-  <div class = "product-item__content">
-  <h2>${this.product.title}</h2>
-  <h3>\$ ${this.product.price}</h3>
-  <p>${this.product.description}</p>
-  <button>Add to Cart</button>
-  </div>
-  </div>
+  // add render method to render one single product logic
   
-  `;
-  // accessing the button
-  const addCartButton = prodElement.querySelector('button');
-  addCartButton.addEventListener('click', this.addToCart.bind(this));
-  return prodElement
-} 
+  renderProduct (){
+    const prodElement = document.createElement('li')
+    prodElement.className = 'product-item';
+    prodElement.innerHTML = `
+    
+    <div>
+    <img src = "${this.product.imageUrl}" alt = "${this.product.title}>
+    <div class = "product-item__content">
+    <h2>${this.product.title}</h2>
+    <h3>\$ ${this.product.price}</h3>
+    <p>${this.product.description}</p>
+    <button>Add to Cart</button>
+    </div>
+    </div>
+    
+    `;
+    // accessing the button
+    const addCartButton = prodElement.querySelector('button');
+    addCartButton.addEventListener('click', this.addToCart.bind(this));
+    return prodElement
+  } 
+}
+
+// now lets create class for the cart items to the screen
+
+class ShoppingCart {
+  items = [];
+  // render method to update the ui
+  render(){
+    const cartEl = document.createElement('section');
+    cartEl.innerHTML = `
+    <h2> Total: \$ ${0}</h2>
+    <button>Order Now</button>
+    `;
+    cartEl.className = 'cart';
+    // we are returning it so that whenever we call we append the cartEl to the dom element.
+    return cartEl;
+  }
 }
 // now we are going instantiate our productList class
 
 
-const productList = new ProductList
-productList.render();
+class Shop {
+  render () {
+    const renderBook = document.querySelector('#app');
+    const cart = new ShoppingCart();
+    const cartEl = cart.render();
+    // lets add a new class called
+    const productList = new ProductList();
+    const prodListEl = productList.render();
+    renderBook.append(cartEl)
+    renderBook.append(prodListEl)
+  }
+}
+const shop = new Shop();
+shop.render();
