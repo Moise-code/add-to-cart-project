@@ -56,8 +56,8 @@ class ProductItem {
   
   // add to cart method
   addToCart (){
-    console.log('adding to cart is successfully passed')
-    console.log(this.product);
+   App.addProductToCart(this.product);
+   
   }
   
   // add render method to render one single product logic
@@ -85,10 +85,37 @@ class ProductItem {
   } 
 }
 
+class Component {
+  createRootElement(tag, cssClasses,attributes){
+    
+  }
+}
+
 // now lets create class for the cart items to the screen
 
 class ShoppingCart {
   items = [];
+
+  set cartItems(value) {
+    this.items = value;
+    this.totalOutput.innerHTML = `<h2> Total: \$ ${this.totalAmount.toFixed(2)}</h2>`
+  }
+
+  get totalAmount() {
+    const sum = this.items.reduce((prevValue, curItem)=>{
+
+      return prevValue +  curItem.price;
+    }, 0)
+    return sum;
+  }
+  // here lets create addproduct method to add a product in the UI
+
+  addProduct(product) {
+    const updatedItems = [...this.items]
+    updatedItems.push(product);
+    this.cartItems = updatedItems;
+  }
+
   // render method to update the ui
   render(){
     const cartEl = document.createElement('section');
@@ -97,6 +124,8 @@ class ShoppingCart {
     <button>Order Now</button>
     `;
     cartEl.className = 'cart';
+    // now we are gouing to target the h2 tag by adding a new property to the class
+    this.totalOutput = cartEl.querySelector('h2')
     // we are returning it so that whenever we call we append the cartEl to the dom element.
     return cartEl;
   }
@@ -107,8 +136,8 @@ class ShoppingCart {
 class Shop {
   render () {
     const renderBook = document.querySelector('#app');
-    const cart = new ShoppingCart();
-    const cartEl = cart.render();
+    this.cart = new ShoppingCart();
+    const cartEl = this.cart.render();
     // lets add a new class called
     const productList = new ProductList();
     const prodListEl = productList.render();
@@ -116,5 +145,19 @@ class Shop {
     renderBook.append(prodListEl)
   }
 }
+
+// creating class holding the whole application
+
+class App {
+static init (){
+  const shop = new Shop();  
+  shop.render();
+  this.cart = shop.cart;
+
+}  
+static addProductToCart (product){
+  this.cart.addProduct(product)
+}
+}
+App.init();
 const shop = new Shop();
-shop.render();
